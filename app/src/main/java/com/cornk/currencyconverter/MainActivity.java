@@ -7,19 +7,20 @@ import java.util.ArrayList;
 import java.util.List;
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.AutoCompleteTextView;
 
 public class MainActivity extends AppCompatActivity {
-    private Spinner spinner1, spinner2;
-    private Button btnSubmit;
+    private Spinner spinner1, spinner2;;
     private EditText from;
     private TextView to;
 
@@ -27,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btnSubmit = (Button) findViewById(R.id.btnSubmit);
         from = (EditText) findViewById(R.id.InputEditText);
         to = (TextView) findViewById(R.id.OutputTextView);
 
@@ -65,15 +65,29 @@ public class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, list2);
         dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner2.setAdapter(dataAdapter2);
-    }
-    public void onClick(View v) {
 
-        int index1 = spinner1.getSelectedItemPosition();
-        int index2 = spinner2.getSelectedItemPosition();
-        float value = Float.parseFloat(from.getText().toString());
+        from.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int i, int i1, int i2) {
 
-        float ratio[] = {23060.00f, 1.0f, 0.85f, 104.45f, 1128.05f, 76.95f, 1.32f, 7.75f, 6.71f, 1.36f};
-        float result = value / ratio[index1] * ratio[index2];
-        to.setText(result + "");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+
+                i1 = spinner1.getSelectedItemPosition();
+                i2 = spinner2.getSelectedItemPosition();
+                float value = Float.parseFloat(from.getText().toString());
+
+                float ratio[] = {23060.00f, 1.0f, 0.85f, 104.45f, 1128.05f, 76.95f, 1.32f, 7.75f, 6.71f, 1.36f};
+                float result = value / ratio[i1] * ratio[i2];
+                to.setText(result + "");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 }
